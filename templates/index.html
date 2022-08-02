@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang = "en">
+  <head>
+    <meta charset = "UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+    <title> NeRu Dialer </title>
+  </head>
+  <body>
+    <p> Enter a phone number to receive a call from NeRu</p>
+    <form method="POST" action="call">
+      <label for="number">Number:</label><br>
+      <input type="text" id="number" name="number"><br>
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
