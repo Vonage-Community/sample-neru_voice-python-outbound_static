@@ -1,3 +1,6 @@
-fastapi[all]
+fastapi
 debugpy
+uvicorn
 nerualpha
+jinja2
+python-multipart
