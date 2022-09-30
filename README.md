@@ -31,10 +31,9 @@ instance:
     entrypoint: [python3, main.py]
     capabilities:
         - voice
-    configurations:
-        contact:
-            type: phone
-            number: '$YOUR_VONAGE_NUMBER'
+    environment:
+        - name: VONAGE_NUMBER
+          value: "$YOUR_VONAGE_NUMBER"
 debug:
     name: debug
     entrypoint: [nodemon, --exec, python3, -m, debugpy, --listen, localhost:9229, main.py]

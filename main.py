@@ -60,11 +60,9 @@ async def health():
 async def call(request: Request, number: str = Form()):
     session = neru.createSession()
     voice = Voice(session)
-    vonageContact = json.loads(os.getenv('NERU_CONFIGURATIONS'))['contact']
-
-    vonageNumber = Contact()
-    vonageNumber.type_ = vonageContact['type']
-    vonageNumber.number = vonageContact['number']
+    vonageContact = MessageContact()
+    vonageContact.type_ = 'sms'
+    vonageContact.number = os.getenv('VONAGE_NUMBER')
 
     to = Contact()
     to.type_ = 'phone'
