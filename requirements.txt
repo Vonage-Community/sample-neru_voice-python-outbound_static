@@ -1,6 +1,6 @@
 fastapi
 debugpy
 uvicorn
-nerualpha
+nerualpha==3.3.1
 jinja2
 python-multipart

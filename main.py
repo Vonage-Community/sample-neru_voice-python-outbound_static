@@ -3,7 +3,6 @@ import sys
 import os
 sys.path.append("vendor")
 import uvicorn
-import json
 
 from fastapi import Request, FastAPI, Form
 from fastapi.staticfiles import StaticFiles
@@ -11,42 +10,13 @@ from fastapi.templating import Jinja2Templates
 from nerualpha.neru import Neru
 from nerualpha.providers.voice.voice import Voice
 from nerualpha.providers.voice.contracts.vapiEventParams import VapiEventParams
-from nerualpha.providers.voice.contracts.IPhoneContact import IPhoneContact
+from nerualpha.providers.voice.contracts.channelPhoneEndpoint import ChannelPhoneEndpoint
 
 app = FastAPI()
 neru = Neru()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
-
-@dataclass
-class Contact(IPhoneContact):
-    type_: str
-    number: str
-    id: str
-    def __init__(self):
-        pass
-    def reprJSON(self):
-        dict = {}
-        keywordsMap = {"from_":"from","del_":"del","import_":"import","type_":"type"}
-        for key in self.__dict__:
-            val = self.__dict__[key]
-
-            if type(val) is list:
-                parsedList = []
-                for i in val:
-                    if hasattr(i,'reprJSON'):
-                        parsedList.append(i.reprJSON())
-                    else:
-                        parsedList.append(i)
-                val = parsedList
-
-            if hasattr(val,'reprJSON'):
-                val = val.reprJSON()
-            if key in keywordsMap:
-                key = keywordsMap[key]
-            dict.__setitem__(key.replace('_hyphen_', '-'), val)
-        return dict
 
 @app.get('/')
 async def index(request: Request):
@@ -60,13 +30,9 @@ async def health():
 async def call(request: Request, number: str = Form()):
     session = neru.createSession()
     voice = Voice(session)
-    vonageContact = MessageContact()
-    vonageContact.type_ = 'sms'
-    vonageContact.number = os.getenv('VONAGE_NUMBER')
 
-    to = Contact()
-    to.type_ = 'phone'
-    to.number = number
+    to = ChannelPhoneEndpoint(number)
+    vonageContact = ChannelPhoneEndpoint(os.getenv('VONAGE_NUMBER'))
 
     ncco = [
                 {
@@ -75,7 +41,7 @@ async def call(request: Request, number: str = Form()):
                 }
         ]
 
-    response = await voice.vapiCreateCall(vonageNumber, [to], ncco).execute()
+    response = await voice.vapiCreateCall(vonageContact, [to], ncco).execute()
 
     vapiEventParams = VapiEventParams()
     vapiEventParams.callback = 'onEvent'
