@@ -1,5 +1,7 @@
 # Making an Outbound Call Using a Static Site, NeRu, Python and the Voice API
 
+## ❗❗❗ **This repo is now deprecated. Check the [Vonage Developer Blog](https://developer.vonage.com/en/blog) for more blog posts and tutorials. For more sample Vonage projects, check the [Vonage Community GitHub repo](https://github.com/Vonage-Community).**
+
 This project shows how to use NeRu and Python with a static HTML website to make an outbound call with the Voice API.
 
 ![The static site](site.png)
